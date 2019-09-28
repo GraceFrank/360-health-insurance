@@ -1,0 +1,28 @@
+const winston = require('winston');
+
+//creating a winston logger object for logging errors
+const { combine, timestamp, prettyPrint, colorize } = winston.format;
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: combine(timestamp(), prettyPrint(), colorize()),
+  //transports are the means by which the errors or info are logged
+  transports: [
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+    new winston.transports.Console()
+  ],
+  //winston exception handler
+  exceptionHandlers: [
+    new winston.transports.File({ filename: 'exceptions.log' }),
+    new winston.transports.Console()
+  ]
+});
+
+/* unhandled promise rejections throw an exception 
+so that it can be caught by winston exception handler
+*/
+process.on('unhandledRejection', ex => {
+  throw ex;
+});
+
+module.exports = logger;
