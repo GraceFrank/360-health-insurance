@@ -78,6 +78,11 @@ const UserSchema = new mongoose.Schema({
     required: true
   },
 
+  isAdmin: {
+    type: Boolean,
+    default: false
+  }
+
 });
 
 //hash password before saving
@@ -90,7 +95,7 @@ UserSchema.pre('save', function() {
 });
 
 UserSchema.methods.generateToken = function() {
-  return jwt.sign({ userId: this._id, roleId: this.email }, config.privateKey);
+  return jwt.sign({ userId: this._id, isAdmin: this.isAdmin }, config.privateKey);
 };
 
 
