@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
-const { hashPassword } = require('../utils/hashPassword');
+const config = require('../config/default')
+const { hashPassword } = require('../services/hashPassword');
+const jwt = require('jsonwebtoken')
 
 const UserSchema = new mongoose.Schema({
   firstName: {
@@ -22,7 +24,6 @@ const UserSchema = new mongoose.Schema({
 
   otherName:{
     type: String,
-    required: true,
     minlength: 2,
     maxlength: 255,
     lowercase: true,
@@ -77,10 +78,6 @@ const UserSchema = new mongoose.Schema({
     required: true
   },
 
-  subscriptionId: {
-    type : mongoose.Types.ObjectId,
-    required: true
-  }
 });
 
 //hash password before saving
@@ -91,6 +88,11 @@ UserSchema.pre('save', function() {
   this.password = hashPassword(this.password);
   next();
 });
+
+UserSchema.methods.generateToken = function() {
+  return jwt.sign({ userId: this._id, roleId: this.email }, config.privateKey);
+};
+
 
 const User = mongoose.model('users', UserSchema);
 

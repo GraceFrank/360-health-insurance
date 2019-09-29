@@ -20,7 +20,7 @@ class UserController {
       if (user)
         return response.created(
           res,
-          _.pick(user, ['_id', 'firstName', 'lastName', 'email'])
+          _.pick(user, ['_id', 'firstName', 'lastName', 'otherName', 'gender', 'age', 'phone', 'email', 'lga', 'town', 'address'])
         );
     } catch (err) {
       return response.internalError(res, err);
