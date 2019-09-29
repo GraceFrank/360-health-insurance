@@ -20,6 +20,23 @@ const UserSchema = new mongoose.Schema({
     trim: true
   },
 
+  otherName:{
+    type: String,
+    required: true,
+    minlength: 2,
+    maxlength: 255,
+    lowercase: true,
+    trim: true
+  },
+
+  phone: {
+    type: String,
+    required: true,
+    minlength: 11,
+    maxlength: 11,
+    trim: true
+  },
+
   email: {
     type: String,
     trim: true,
@@ -33,10 +50,35 @@ const UserSchema = new mongoose.Schema({
     maxlength: 255
   },
 
+  lga:{
+    type: String,
+    required: true,
+    enum: ['YELGA', 'SILGA', 'KOLGA', 'SALGA', 'BALGA', 'OLGA', 'NLGA', 'ELGA']
+  },
 
-  isAdmin: {
-    type: Boolean,
-    default: false,
+  town: {
+    type: String,
+    required: true
+  },
+  age:{
+    type: Number,
+    required: true,
+    max: 150,
+    min: 0.1
+  },
+  gender:{
+    type: String,
+    required: true,
+    enum: ['male', 'female']
+  },
+
+  address:{
+    type: String,
+    required: true
+  },
+
+  subscriptionId: {
+    type : mongoose.Types.ObjectId,
     required: true
   }
 });
