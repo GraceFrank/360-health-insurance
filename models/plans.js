@@ -1,4 +1,4 @@
-const mongoose = require('mongoose'),
+const mongoose = require('mongoose');
 
 const planSchema = new mongoose.Schema({
   name: {
@@ -7,6 +7,6 @@ const planSchema = new mongoose.Schema({
     min: 3,
     max: 255
   }
-})
+});
 
 module.exports = mongoose.model('plans', planSchema);
