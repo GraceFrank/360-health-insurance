@@ -1,5 +1,6 @@
 const Subscription = require('../models/subscription');
 const Plan = require('../models/plans');
+const isValidId = require('../services/validateId');
 
 const validatePayload = require('../validations/subscription-validation');
 const response = require('../utils/responses');
@@ -21,6 +22,23 @@ class SubscriptionController {
       const subscription = await Subscription.create(req.body);
       return response.created(res, subscription);
     } catch (err) {
+      return response.internalError(res, err);
+    }
+  }
+
+  static async getUserSubscription(req, res) {
+    try {
+      if (!isValidId(req.params.userId))
+        return response.badRequest(res, { message: 'invalid id' });
+
+      const subscription = await Subscription.findOne({
+        userId: req.params.userId
+      });
+      if (!subscription)
+        return response.notFound(res, { message: 'user not subscribed' });
+      return response.success(res, subscription);
+    } catch (err) {
+      console.log(err);
       return response.internalError(res, err);
     }
   }
