@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const subscriptionSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Types.ObjectId,
-    required: true,
+    required: true
   },
 
   planId: {
@@ -13,8 +13,7 @@ const subscriptionSchema = new mongoose.Schema({
 
   paymentType: {
     type: String,
-    required: true,
-    
+    required: true
   },
 
   price: {
@@ -23,8 +22,12 @@ const subscriptionSchema = new mongoose.Schema({
     min: 1500
   },
 
-})
+  primaryHospital: {
+    type: mongoose.Types.ObjectId,
+    type: String
+  }
+});
 
-const Subscription =  mongoose.model('subscriptions', subscriptionSchema);
+const Subscription = mongoose.model('subscriptions', subscriptionSchema);
 
 module.exports = Subscription;

@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const users = require('./users-route');
 const login = require('./login-route');
 const plan = require('./plan-route');
+const subscription = require('./subscription-route');
 
 const routes = app => {
   app.use(bodyParser.json());
@@ -12,6 +13,7 @@ const routes = app => {
   app.use('/api/users', users);
   app.use('/api/login', login);
   app.use('/api/plans', plan);
+  app.use('/api/subs', subscription);
 
   app.use(helmet());
   app.use(compression());
