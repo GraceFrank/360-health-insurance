@@ -1,15 +1,10 @@
 const express = require('express');
 const authenticate = require('../middlewares/authentication');
 const authorizeAdmin = require('../middlewares/admin-auth');
+const planController = require('../controllers/plan-controller');
 
 const router = express.Router();
-const UserController = require('../controllers/user-controller');
 
-router.post('/', UserController.signUp);
-router.get(
-  '/subscription/:id',
-  [authenticate, authorizeAdmin],
-  UserController.getUsers
-);
+router.post('/', [authenticate, authorizeAdmin], planController.createPlan);
 
 module.exports = router;

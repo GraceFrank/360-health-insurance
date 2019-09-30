@@ -4,7 +4,7 @@ const User = require('../models/user');
 const _ = require('lodash');
 
 class UserController {
-  static async post(req, res) {
+  static async signUp(req, res) {
     try {
       //validate that the req.body payload
       const { error } = validatePayload(req.body);
@@ -20,8 +20,29 @@ class UserController {
       if (user)
         return response.created(
           res,
-          _.pick(user, ['_id', 'firstName', 'lastName', 'email'])
+          _.pick(user, [
+            '_id',
+            'firstName',
+            'lastName',
+            'otherName',
+            'gender',
+            'age',
+            'phone',
+            'email',
+            'lga',
+            'town',
+            'address'
+          ])
         );
+    } catch (err) {
+      return response.internalError(res, err);
+    }
+  }
+
+  static async getUsers(req, res) {
+    try {
+      const users = await User.find({});
+      return response.success(res, users);
     } catch (err) {
       return response.internalError(res, err);
     }

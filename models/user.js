@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
-const { hashPassword } = require('../utils/hashPassword');
+const config = require('../config/default')
+const { hashPassword } = require('../services/hashPassword');
+const jwt = require('jsonwebtoken')
 
 const UserSchema = new mongoose.Schema({
   firstName: {
@@ -20,6 +22,22 @@ const UserSchema = new mongoose.Schema({
     trim: true
   },
 
+  otherName:{
+    type: String,
+    minlength: 2,
+    maxlength: 255,
+    lowercase: true,
+    trim: true
+  },
+
+  phone: {
+    type: String,
+    required: true,
+    minlength: 11,
+    maxlength: 11,
+    trim: true
+  },
+
   email: {
     type: String,
     trim: true,
@@ -33,12 +51,38 @@ const UserSchema = new mongoose.Schema({
     maxlength: 255
   },
 
+  lga:{
+    type: String,
+    required: true,
+    enum: ['YELGA', 'SILGA', 'KOLGA', 'SALGA', 'BALGA', 'OLGA', 'NLGA', 'ELGA']
+  },
+
+  town: {
+    type: String,
+    required: true
+  },
+  age:{
+    type: Number,
+    required: true,
+    max: 150,
+    min: 0.1
+  },
+  gender:{
+    type: String,
+    required: true,
+    enum: ['male', 'female']
+  },
+
+  address:{
+    type: String,
+    required: true
+  },
 
   isAdmin: {
     type: Boolean,
-    default: false,
-    required: true
+    default: false
   }
+
 });
 
 //hash password before saving
@@ -49,6 +93,11 @@ UserSchema.pre('save', function() {
   this.password = hashPassword(this.password);
   next();
 });
+
+UserSchema.methods.generateToken = function() {
+  return jwt.sign({ userId: this._id, isAdmin: this.isAdmin }, config.privateKey);
+};
+
 
 const User = mongoose.model('users', UserSchema);
 

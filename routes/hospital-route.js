@@ -1,15 +1,15 @@
 const express = require('express');
 const authenticate = require('../middlewares/authentication');
 const authorizeAdmin = require('../middlewares/admin-auth');
+const hospitalController = require('../controllers/hospital-controller');
 
 const router = express.Router();
-const UserController = require('../controllers/user-controller');
 
-router.post('/', UserController.signUp);
-router.get(
-  '/subscription/:id',
+router.post(
+  '/',
   [authenticate, authorizeAdmin],
-  UserController.getUsers
+  hospitalController.addHospital
 );
+router.get('/', hospitalController.getAllHospitals);
 
 module.exports = router;
