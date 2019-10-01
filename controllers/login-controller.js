@@ -3,7 +3,10 @@ const _ = require('lodash');
 const validateLoginDetails = require('../validations/login-validation');
 const response = require('../utils/responses');
 const User = require('../models/user');
+const Subscription = require('../models/subscription');
 const { isValidPassword } = require('../services/hashPassword');
+const Hospital = require('../models/hospitals');
+const Plan = require('../models/plans');
 
 class loginController {
   static async login(req, res) {
@@ -25,15 +28,32 @@ class loginController {
           message: 'invalid email or password'
         });
 
-     
-        const token = user.generateToken();
+      const token = user.generateToken();
 
-      return response.success(res,  {
-          'x-auth-token': token,
-          message: 'ok',
-          data: _.pick(user, ['_id', 'name', 'email', 'userName', 'otherName', 'gender', 'age', 'phone', 'email', 'lga', 'town', 'address'])
-        })
+      user = _.pick(user, [
+        '_id',
+        'name',
+        'email',
+        'userName',
+        'otherName',
+        'gender',
+        'age',
+        'phone',
+        'email',
+        'lga',
+        'town',
+        'address'
+      ]);
+      const subscription = await Subscription.findOne({ userId: user._id });
+      const plan = await Plan.findById(subscription.planId);
 
+      const hospital = await Hospital.findOne({ lga: user.lga });
+
+      return response.success(res, {
+        'x-auth-token': token,
+        message: 'ok',
+        data: { user, subscription, hospital, plan }
+      });
     } catch (err) {
       console.log(err);
       return response.internalError(res, err);

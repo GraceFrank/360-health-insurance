@@ -8,7 +8,8 @@ const subscriptionSchema = new mongoose.Schema({
 
   planId: {
     type: mongoose.Types.ObjectId,
-    required: true
+    required: true,
+    ref: 'plans'
   },
 
   paymentType: {
@@ -24,7 +25,8 @@ const subscriptionSchema = new mongoose.Schema({
 
   primaryHospital: {
     type: mongoose.Types.ObjectId,
-    type: String
+    type: String,
+    ref: 'hospitals'
   }
 });
 
