@@ -5,7 +5,7 @@ function validateSubscription(payload) {
   const schema = {
     userId: Joi.objectId().required(),
 
-    planId: Joi.objectId().required(),
+    planId: Joi.string(),
 
     paymentType: Joi.string().valid('monthly', 'quaterly', 'annually'),
 

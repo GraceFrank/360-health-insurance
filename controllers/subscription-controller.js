@@ -13,13 +13,15 @@ class SubscriptionController {
         return response.badRequest(res, { message: error.details[0].message });
 
       //check that planId is valid
-      const planId = await Plan.findById(req.body.planId);
-      if (!planId)
+      const plan = await Plan.findOne({ name: req.body.planId });
+      if (!plan)
         return response.notFound(res, {
           message: 'plan with provided Id does not exist'
         });
 
-      const subscription = await Subscription.create(req.body);
+      let subscription = new Subscription(req.body);
+      subscription.planId = plan._id;
+      subscription = await subscription.save();
       return response.created(res, subscription);
     } catch (err) {
       return response.internalError(res, err);
