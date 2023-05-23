@@ -1,7 +1,7 @@
 //module dependencies
-const mongoose = require('mongoose');
-const config = require('../config/default');
-const logger = require('../utils/logger');
+const mongoose = require("mongoose");
+const config = require("../config/default");
+const logger = require("../utils/logger");
 
 function connectToDb() {
   //get db from config module, depending on the node environment
@@ -11,13 +11,12 @@ function connectToDb() {
   return mongoose
     .connect(db, {
       useNewUrlParser: true,
-      useCreateIndex: true
     })
     .then(() => {
       logger.info(`connected to database`);
     })
-    .catch(err => {
-      logger.error(err);
+    .catch((err) => {
+      console.log("Error connecting to database", err);
       process.exit(1);
     });
 }
